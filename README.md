@@ -56,7 +56,7 @@ Lastly, the select() function uses the modular functions written earlier and imp
 
 1. Generate an initial list of p sequences using the function generate(). Since this sequence is a binary encoding representing whether or not to include a covariate in the model, one suggested way to do this is to choose p such that $C \leq P \leq 2C$, where c is the length of each sequence. We decided to make $P = ceiling(\frac{1.5 \times C}{2}) \times 2$, which ensures that it's an even number between $C$ and $2C$.      
 
-Then, run steps 2-5 until the absolute value of the difference between the objective criterion score of the current iteration and the objective criterion score of the previous iteration is less than $10^{-4}$ (absolute convergence).     
+Then, run steps 2-5 until the absolute value of the difference between the objective criterion score of the current iteration and the objective criterion score of the previous iteration is less than $10^{-4}$ (absolute convergence) or if the algorithm has run for over 100 iterations.     
 
 2. Select $\frac{p}{2}$ pairs of parents to do genetic operations on using the select() function.     
 
@@ -68,7 +68,7 @@ Then, run steps 2-5 until the absolute value of the difference between the objec
 
 6. Once the algorithm converges, return the model with the best objective criterion score from the final iteration of the algorithm, and that will be the model that is selected by the genetic algorithm.     
 
-### Application
+## Application
 Here are three ways one would use the select() function:
 
 ```r

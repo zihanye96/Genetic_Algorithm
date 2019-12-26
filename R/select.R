@@ -65,7 +65,7 @@ select <- function(data, response, covariates, criterion="AIC", family = "gaussi
   currentScore <- 1000000
   i <- 0
 
-  while(abs(prevScore-currentScore)>1e-6){
+  while(abs(prevScore-currentScore)>1e-4 && i<100){
 
     ## select pairs of parents to do crossover and do crossover
     parents <- selection(p, mods, response, covariates, data, criterion, family=family)
@@ -77,11 +77,14 @@ select <- function(data, response, covariates, criterion="AIC", family = "gaussi
 
     ## mutate each individual chromosome
     mutated <- lapply(crossed, mutate, c)
-
+    
     ## choose the best chromosome in this generation
     best <- choose(p, mutated, response, covariates, data,
                    criterion, family= family, maximize = maximize)
 
+    ## pass the mutated chromosomes to the next iteration of algorithm
+    mods <- mutated
+    
     prevScore <- currentScore
     currentScore <- best$fitness
 
