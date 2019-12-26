@@ -1,0 +1,18 @@
+Package: GA
+Title: A genetic algorithm for variable selection
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Zihan", "Ye", email = "zihanye96@berkeley.edu", role = c("aut", "cre")),
+    person("Jing", "Xu", email = "julia_x@berkeley.edu", role = c("aut")),
+    person("Asem", "Berkalieva", email = "asem_berkalieva@berkeley.edu", role = c("aut"))
+    )
+Description: This R package provides a genetic algorithm for variable selection in
+    regression problems, including both linear regression and GLMs.
+License: MIT + file LICENSE
+Depends: 
+    R (>= 3.2.0)
+Suggests:
+    testthat
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
