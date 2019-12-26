@@ -1,21 +1,3 @@
-<style TYPE="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
-</style>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-tex2jax: {
-inlineMath: [['$','$'], ['\\(','\\)']],
-skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-}
-});
-MathJax.Hub.Queue(function() {
-var all = MathJax.Hub.getAllJax(), i;
-for(i = 0; i < all.length; i += 1) {
-all[i].SourceElement().parentNode.className += ' has-jax';
-}
-});
-</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
 
 
 # Genetic Algorithm for Variable Selection in Regression
@@ -62,7 +44,7 @@ The crossover() function takes as input a numeric vector of two index values and
 
 ### Mutate      
 
-The mutate() function takes as input a sequence of length $c$ and mutates each bit in the sequence with probability $\frac{1}{c}$. We chose the mutation rate of $\frac{1}{c}$ because "theoretical work and empirical studies have supported a rate of $1/C$" [Givens and Hoeting, 80]. If after mutating a chromosome, the chromosome contains all 0's, then the function repeats the mutation process until the chromosome doesn't contain all 0's, as it's not possible to fit a model with no covariates.          
+The mutate() function takes as input a sequence of length $c$ and mutates each bit in the sequence with probability $\frac{1}{c}$. We chose the mutation rate of $\frac{1}{c}$ because theoretical work and empirical studies have supported a rate of $1/C$. If after mutating a chromosome, the chromosome contains all 0's, then the function repeats the mutation process until the chromosome doesn't contain all 0's, as it's not possible to fit a model with no covariates.          
 
 ### Choose      
 
@@ -72,7 +54,7 @@ The choose() function takes as input a list of mutated sequences and returns the
 
 Lastly, the select() function uses the modular functions written earlier and implements the genetic algorithm as follows:           
 
-1. Generate an initial list of p sequences using the function generate(). Since this sequence is a binary encoding representing whether or not to include a covariate in the model, one suggested way to do this is to choose p such that $C \leq P \leq 2C$, where c is the length of each sequence [Givens and Hoeting, 79]. We decided to make $P = ceiling(\frac{1.5 \times C}{2}) \times 2$, which ensures that it's an even number between $C$ and $2C$.      
+1. Generate an initial list of p sequences using the function generate(). Since this sequence is a binary encoding representing whether or not to include a covariate in the model, one suggested way to do this is to choose p such that $C \leq P \leq 2C$, where c is the length of each sequence. We decided to make $P = ceiling(\frac{1.5 \times C}{2}) \times 2$, which ensures that it's an even number between $C$ and $2C$.      
 
 Then, run steps 2-5 until the absolute value of the difference between the objective criterion score of the current iteration and the objective criterion score of the previous iteration is less than $10^{-4}$ (absolute convergence).     
 
@@ -86,61 +68,46 @@ Then, run steps 2-5 until the absolute value of the difference between the objec
 
 6. Once the algorithm converges, return the model with the best objective criterion score from the final iteration of the algorithm, and that will be the model that is selected by the genetic algorithm.     
 
+### Application
+Here are three ways one would use the select() function:
+
+```r
+library(GA)
+```
+
+For the examples below, we will use mtcars, which is a built-in dataset containing 11 variables. Here is how the dataset looks like.
+
+```r
+data <- mtcars
+head(mtcars)
+```
+
+### Example 1     
+First, we will run the genetic algorithm for linear regression using all the available variables in the dataset to predict "mpg". 
+
+```r
+response <- "mpg"
+covariates <- c("cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am", "gear", "carb")
+select(data, response, covariates)
+```
+
+### Example 2      
+Here, we will use select() to perform logistic regression. Since the variables "vs" takes values 0 or 1, we will perform logistic regression on that variable using the remaining 10 as covariates.
+
+```r
+response <- "am"
+covariates <- c("mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "gear", "carb")
+select(data, response, covariates, family = "binomial")
+```
 
 
-### Introduction
+### Example 3         
+Here, let's say we don't think the variables "gear" and "carb" are useful for predicting "mpg". In this case, we can provide as input a subset of all the available variables in the dataset as covariates and select() will only run the genetic algorithm on that subset of variables. I will also use BIC as the objective criterion to show that the function can take other objective criterion functions.
 
-This document explains the process for reproducing the data and analysis described in the paper entitled ``A Cohort Location Model of Household Sorting in US Metropolitan Regions''.  There are three key steps in reproducing the data and analysis:
+```r
+response <- "mpg"
+covariates <- c("cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am")
+select(data, response, covariates, criterion="BIC")
+```
 
-1. Download all code and data files from this repository at: [http://www.github.com/AndyKrause/hhLocation](http://www.github.com/AndyKrause/hhLocation "Git")
 
-2. Open the code in R and change the directory paths to your desired paths (more on this later)
-
-3. Execute the **hhLocAnalysis.R** script.  Note:  this may take a few hours as the raw data is downloaded the first time you run the script.
-
-NOTE: Data at two intermediate steps may be downloaded from a Dataverse Repository at: [http://dx.doi.org/10.7910/DVN/C9KPZA](http://dx.doi.org/10.7910/DVN/C9KPZA).  This allows the user to skip the very lengthly and data storage heavy data compilation and initial cleaning and compiling steps (if so desired).  The two intermediate datasets are described below.
-
-### Downloading Code and Data
-
-All code used the create this analysis, including raw data, cleaned data and final analysis are available at [http://www.github.com/AndyKrause/hhLocation](http://www.github.com/AndyKrause/hhLocation "Git").  This complete data provenance is recorded in R (version 3.1.1) and was built using the RStudio IDE.  There are four separate files in this repository.  The first, **hhLocAnalysis.R:**, is the main script and is the only one that needs to be updated and executed.  A description of each is below.
-
-1. **hhLocAnalysis.R:**  The main script which controls the data cleaning, analysis and plotting.
-2. **buildCBSAData.R:**  A set of functions to download and prepare the necessary CBSA information.
-3. **buildHHData.R:** A set of functions for downloading and preparing the necessary census SF1 data.
-4. **hhLocFunctions.R:** A set of functions for analyzing and plotting the household location data and results.
-
-Along with this code files are three small data files in .csv form.  The first is required to run the analysis in any form, while the second two are necessary only to recreate the analysis exactly as first performed.  Note that removing the second and third file but keeping the `nbrCBSA` parameter at a value of **50** will create the same results. 
-
-1. **statelist.csv:**  Simple list of all 50 states with their abbreviations.
-2. **studyCBSAlist.csv:**  A list of the 50 most populous CBSAs in the United States.
-3. **studyCitylist:** A list of all cities (subcenters) that are named within the most populous 50 CBSAs.
-
-#### Intermediate Data
-
-To save time, the user may download intermediate datasets -- prepared data (predData.csv) and cleaned data (cleanData.csv) from the DATAVERSE site.  The prepared data included compiled household age information on all census blocks in the 50 largest CBSAs.  The cleaned data has removed census blocks without households, fixed a number of city names and rescaled the distances.  Instructions on how to replicate the analysis with either of the intermediate datasets is described below. 
-
-### Before running the code
-
-#### R Libraries
-
-Ensure that the following R libraries are installed: `ggplot2`, `plyr`, `dplyr`, `geosphere` and `stringr`.  You can check them with the `library` commands as shown below.  Missing libraries can be downloaded and installed with `install.packages('ggplot2')`, for example. 
-
-library(ggplot2)
-library(reshape)
-library(plyr)
-library(dplyr)
-library(geosphere)
-library(stringr)
-
-#### Analysis parameters
-
-Six parameters control the depth and type of analyses that will be performed.  **reBuildData** determines whether or not the user intends to download all of the raw data directly from the census and completely recreate the analysis from scratch.  Users who have NOT downloaded one of the two intermediate datasets must set this parameter to TRUE. **reCleanData** determines whether or not the prepared data will be cleaned. Users who have downloaded the **cleanData.csv** may set this to FALSE and use the downloaded dataset.  The **reScaleDists** parameter allows users to change the scaling of the distance variables.  If the user is recreating the data from the beginning (not using intermediate datasets) then setting **reScaleDists** to FALSE will use all census block groups with households regardless of their distance from the centers or subcenters in the CBSA.  Setting this parameter to TRUE will scale the distances by the lesser of the maximum distance in each CBSA region or by the global **maxDist** parameter (in miles).  In the paper we use a maximum distance of 60 miles.  If the user has opted to use the clean data intermediate dataset then the data is already scaled to the 60 mile distance and this parameter can be set to FALSE.
-
-The **nbrCBSA** parameter determines how many CBSAs to analyze.  The count is done from the most populous down to the least populous.  A value of 50 is used in the analysis described in the paper.  A user wishing to change this value will have to recreate the data from scratch (set **reBuildData**, **reCleanData** and **reScaleDists** to TRUE).  Greatly increasing this value may greatly lengthen run-times and, depending on your computer memory, may crash the analysis. Finally, the **verbose** parameter defines whether or not the data-building and analytical functions will write their progress to the screen.  The defaults for the six parameters used in the paper are shown below. 
-
-reBuildData <- TRUE
-reCleanData <- TRUE
-reScaleDists <- TRUE
-nbrCBSA <- 50
-maxDist <- 60
-verbose <- TRUE
