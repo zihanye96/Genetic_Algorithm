@@ -1,10 +1,10 @@
 # Genetic Algorithm for Variable Selection in Regression
 
-This package implements a genetic algorithm for variable selection in regression using the guidelines outlined in Chapter 3 of *Computational Statistics* by Geof H. Givens and Jennifer A. Hoeting. The package includes modular functions that are designed to execute individual steps in the algorithm, and the main function, **select()**, utilizes these modular functions to output the "best" regression model using the inputs provided by the user (more below)  
+This package implements a genetic algorithm for variable selection in regression using the guidelines outlined in (Chapter 3)[https://github.com/zihanye96/Genetic_Algorithm/blob/master/givens_hoeting_ch3.pdf] of *Computational Statistics* by Geof H. Givens and Jennifer A. Hoeting. The package includes modular functions that are designed to execute individual steps in the algorithm, and the main function, **select()**, utilizes these modular functions to output the "best" regression model using the inputs provided by the user (more below)  
 
 ## Overview
 
-Select will take 6 inputs:      
+The main function, select(), will take 6 inputs:      
 
 1. The object corresponding to the dataset being used.             
 
@@ -17,6 +17,8 @@ Select will take 6 inputs:
 5. A character string corresponding to the type of regression the user would like to perform. By default, the function uses "Gaussian", which is the default identity link that's equivalent to performing standard linear regression. However, the user can specify other families, such as binomial, which uses a logit link by default and allows the user to perform logistic regression. The user can specify any family that is accepted by the glm() function.      
 
 6. A boolean variable called "maximize", indicating whether the objective criterion should be maximized or minimized. For example, if the objective criterion select() is using is written by the user and the user would like to maximize this objective criterion (instead of minimize, as one would if the objective criterion were AIC), they can specify "maximize = TRUE" as an input. By default, maximize is false.     
+
+Using these inputs, select() will run a genetic algorithm and return the regression model at the final iteration of the algorithm.
 
 ### Introduction
 
