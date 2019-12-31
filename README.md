@@ -2,7 +2,7 @@
 
 # Genetic Algorithm for Variable Selection in Regression
 
-This package implements a genetic algorithm for variable selection in regression using the guidelines outlined in [Chapter 3](https://github.com/zihanye96/Genetic_Algorithm/blob/master/givens_hoeting_ch3.pdf) of *Computational Statistics* by Geof H. Givens and Jennifer A. Hoeting. The package includes modular functions that are designed to execute individual steps in the algorithm, and the main function, **select()**, utilizes these modular functions to output the "best" regression model using the inputs provided by the user (more below). This package was created in collaboration with Asem Berkalieva and Jing Xu for STAT 243 (Statistical Computing) at UC Berkeley.  
+This package implements a genetic algorithm for variable selection in regression using the guidelines outlined in [Chapter 3](https://github.com/zihanye96/Genetic_Algorithm/blob/master/givens_hoeting_ch3.pdf) of [*Computational Statistics*](https://github.com/zihanye96/Genetic_Algorithm/blob/master/givens_hoeting_ch3.pdf) by Geof H. Givens and Jennifer A. Hoeting. The package includes modular functions that are designed to execute individual steps in the algorithm, and the main function, **select()**, utilizes these modular functions to output the "best" regression model using the inputs provided by the user (more below). This package was created in collaboration with Asem Berkalieva and Jing Xu for STAT 243 (Statistical Computing) at UC Berkeley.  
 
 ## Overview
 
