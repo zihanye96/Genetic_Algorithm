@@ -42,7 +42,7 @@ The crossover() function takes as input a numeric vector of two index values and
 
 ### Mutate      
 
-The mutate() function takes as input a sequence of length $c$ and mutates each bit in the sequence with probability 1/c. We chose the mutation rate of 1/c because theoretical work and empirical studies have supported a rate of 1/c. If after mutating a chromosome, the chromosome contains all 0's, then the function repeats the mutation process until the chromosome doesn't contain all 0's, as it's not possible to fit a model with no covariates.          
+The mutate() function takes as input a sequence of length c and mutates each bit in the sequence with probability 1/c. We chose the mutation rate of 1/c because theoretical work and empirical studies have supported a rate of 1/c. If after mutating a chromosome, the chromosome contains all 0's, then the function repeats the mutation process until the chromosome doesn't contain all 0's, as it's not possible to fit a model with no covariates.          
 
 ### Choose      
 
